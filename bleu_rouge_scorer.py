@@ -1,11 +1,3 @@
-"""
-BLEU & ROUGE Scorer — Streamlit UI
-====================================
-Run with:
-    pip install streamlit plotly pandas
-    streamlit run bleu_rouge_app.py
-"""
-
 import json
 import math
 import re
@@ -14,11 +6,7 @@ from collections import Counter
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
-
-# ══════════════════════════════════════════════════════════════════════════════
 #  PAGE CONFIG
-# ══════════════════════════════════════════════════════════════════════════════
-
 st.set_page_config(
     page_title="BLEU & ROUGE Scorer",
     page_icon="⚡",
@@ -26,9 +14,7 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ══════════════════════════════════════════════════════════════════════════════
 #  GLOBAL STYLES
-# ══════════════════════════════════════════════════════════════════════════════
 
 st.markdown("""
 <style>
@@ -341,10 +327,7 @@ header    { visibility: hidden; }
 </style>
 """, unsafe_allow_html=True)
 
-
-# ══════════════════════════════════════════════════════════════════════════════
 #  CORE LOGIC  (self-contained, no external NLP deps required)
-# ══════════════════════════════════════════════════════════════════════════════
 
 def tokenize(text: str) -> list:
     text = re.sub(r'[^\w\s]', ' ', text, flags=re.UNICODE)
@@ -411,10 +394,7 @@ def compute_rouge(candidate, reference):
         "rouge_l": _rouge_l(candidate, reference),
     }
 
-
-# ══════════════════════════════════════════════════════════════════════════════
 #  EXPLANATIONS
-# ══════════════════════════════════════════════════════════════════════════════
 
 EXPLANATIONS = {
     "bleu_1": {
@@ -477,8 +457,7 @@ EXPLANATIONS = {
 }
 
 LANGUAGE_EXAMPLES = {
-    # ── Monolingual examples ──────────────────────────────────────────────────
-    "English": {
+    # Monolingual exampless 
         "ref":  "The quick brown fox jumps over the lazy dog near the river bank.",
         "cand": "A quick brown fox leaps over the lazy dog by the river.",
         "mode": "mono",
@@ -503,7 +482,7 @@ LANGUAGE_EXAMPLES = {
         "cand": "AI మానవ ఆలోచనను అనుసరించే కంప్యూటర్ సిస్టమ్.",
         "mode": "mono",
     },
-    # ── English → Indian language (EN ref, Indian cand) ──────────────────────
+    # English → Indian language (EN ref, Indian cand)
     "EN → Hindi": {
         "ref":  "Artificial intelligence is transforming the way we live and work every day.",
         "cand": "कृत्रिम बुद्धिमत्ता हमारे जीने और काम करने के तरीके को हर दिन बदल रही है।",
@@ -540,7 +519,7 @@ LANGUAGE_EXAMPLES = {
         "mode": "en_to_indian",
         "lang_label": "English → Bengali",
     },
-    # ── Indian language → English (Indian ref, EN cand) ──────────────────────
+    #Indian language → English (Indian ref, EN cand)
     "Hindi → EN": {
         "ref":  "भारत विविधताओं से भरा एक महान देश है जहाँ अनेक भाषाएँ और संस्कृतियाँ हैं।",
         "cand": "India is a great country full of diversity, with many languages and cultures.",
@@ -580,10 +559,7 @@ LANGUAGE_EXAMPLES = {
     "Custom": {"ref": "", "cand": "", "mode": "mono"},
 }
 
-
-# ══════════════════════════════════════════════════════════════════════════════
 #  HELPERS
-# ══════════════════════════════════════════════════════════════════════════════
 
 def verdict(score):
     if score >= 0.5: return "Good",  "score-good", "bar-good"
@@ -670,11 +646,7 @@ def bar_chart(bleu, rouge):
     )
     return fig
 
-
-# ══════════════════════════════════════════════════════════════════════════════
 #  SIDEBAR
-# ══════════════════════════════════════════════════════════════════════════════
-
 with st.sidebar:
     st.markdown("""
     <div style="font-family:'Space Mono',monospace;font-size:1rem;font-weight:700;
@@ -709,10 +681,8 @@ with st.sidebar:
     Pure-Python implementation · No external NLP libs required · Unicode-aware tokeniser
     </div>""", unsafe_allow_html=True)
 
-
-# ══════════════════════════════════════════════════════════════════════════════
 #  HEADER
-# ══════════════════════════════════════════════════════════════════════════════
+
 
 st.markdown("""
 <div class="hero-header">
@@ -729,20 +699,14 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-
-# ══════════════════════════════════════════════════════════════════════════════
 #  TABS
-# ══════════════════════════════════════════════════════════════════════════════
 
 tab_single, tab_batch, tab_compare, tab_improve = st.tabs(["  Single Pair  ", "  Batch Mode  ", "  Score Glossary  ", "  💡 Improve Scores  "])
 
-
-# ─────────────────────────────────────────────────────────────────────────────
 #  TAB 1 — SINGLE PAIR
-# ─────────────────────────────────────────────────────────────────────────────
 
 with tab_single:
-    # ── Translation direction filter + example picker ──────────────────────
+    # Translation direction filter + example picker
     st.markdown('<div class="section-title">Load Example</div>', unsafe_allow_html=True)
 
     DIRECTION_GROUPS = {
@@ -892,7 +856,7 @@ with tab_single:
                 mime="application/json",
             )
 
-            # ── Smart improvement tips (context-aware) ──
+            #Smart improvement tips (context-aware)
             st.markdown('<div class="section-title">💡 How to Improve These Scores</div>', unsafe_allow_html=True)
 
             bleu4   = bleu["bleu_4"]
@@ -982,9 +946,7 @@ with tab_single:
                 </div>""", unsafe_allow_html=True)
 
 
-# ─────────────────────────────────────────────────────────────────────────────
 #  TAB 2 — BATCH MODE
-# ─────────────────────────────────────────────────────────────────────────────
 
 with tab_batch:
     st.markdown("""
@@ -1099,10 +1061,7 @@ with tab_batch:
                 st.download_button("⬇  Download Full Results (JSON)", batch_json,
                                    "batch_results.json", "application/json")
 
-
-# ─────────────────────────────────────────────────────────────────────────────
 #  TAB 3 — SCORE GLOSSARY
-# ─────────────────────────────────────────────────────────────────────────────
 
 with tab_compare:
     st.markdown('<div class="section-title">Metric Reference</div>', unsafe_allow_html=True)
@@ -1143,10 +1102,7 @@ with tab_compare:
     alongside human evaluation.
     </div>""", unsafe_allow_html=True)
 
-
-# ─────────────────────────────────────────────────────────────────────────────
 #  TAB 4 — IMPROVE YOUR SCORES
-# ─────────────────────────────────────────────────────────────────────────────
 
 with tab_improve:
 
@@ -1156,7 +1112,7 @@ with tab_improve:
     model training, decoding strategies, data quality, and the limits of these metrics.
     </div>""", unsafe_allow_html=True)
 
-    # ── Quick diagnosis tool ──────────────────────────────────────────────────
+    #Quick diagnosis tool
     st.markdown('<div class="section-title">🔍 Quick Score Diagnosis</div>', unsafe_allow_html=True)
 
     diag_col1, diag_col2, diag_col3 = st.columns(3, gap="small")
@@ -1213,7 +1169,7 @@ with tab_improve:
           <div style="font-size:0.85rem;color:#93b4d4;line-height:1.7">{body}</div>
         </div>""", unsafe_allow_html=True)
 
-    # ── The 5 pillars ─────────────────────────────────────────────────────────
+    #  The 5 pillars
     st.markdown('<div class="section-title">📋 The 5 Pillars of Better Scores</div>', unsafe_allow_html=True)
 
     PILLARS = [
@@ -1282,7 +1238,7 @@ with tab_improve:
                   </div>
                 </div>""", unsafe_allow_html=True)
 
-    # ── Score benchmarks table ─────────────────────────────────────────────────
+    # Score benchmarks table
     st.markdown('<div class="section-title">🎯 Score Benchmarks by Task</div>', unsafe_allow_html=True)
     bench_data = {
         "Task":         ["MT (high-resource, e.g. EN-DE)", "MT (low-resource)", "MT (Indian languages)", "Abstractive Summarisation", "Extractive Summarisation", "Text Generation (open-ended)"],
@@ -1293,7 +1249,7 @@ with tab_improve:
     df_bench = pd.DataFrame(bench_data).set_index("Task")
     st.dataframe(df_bench, use_container_width=True)
 
-    # ── Common mistakes ────────────────────────────────────────────────────────
+    #  Common mistakes
     st.markdown('<div class="section-title">❌ Common Mistakes That Hurt Scores</div>', unsafe_allow_html=True)
 
     MISTAKES = [
@@ -1316,10 +1272,7 @@ with tab_improve:
               <div style="color:#93b4d4;font-size:0.82rem;line-height:1.6">✓ {fix}</div>
             </div>""", unsafe_allow_html=True)
 
-
-# ══════════════════════════════════════════════════════════════════════════════
 #  FOOTER
-# ══════════════════════════════════════════════════════════════════════════════
 
 st.markdown("""
 <style>
