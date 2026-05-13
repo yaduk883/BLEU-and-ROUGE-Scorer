@@ -929,7 +929,7 @@ with tab_single:
                     "add semantic metrics (BERTScore, chrF), and always complement with human evaluation."))
 
             # Generic always-on tips
-            tips.append(("📚 General best practices", "#38bdf8",
+            tips.append((" General best practices", "#38bdf8",
                 "<b>1. Use multiple references</b> — BLEU/ROUGE measure surface overlap; more references = fairer evaluation.<br>"
                 "<b>2. Domain-specific training data</b> — Models trained on in-domain text produce outputs closer to reference phrasing.<br>"
                 "<b>3. Beam search tuning</b> — Larger beam sizes (e.g. 10–20) often improve BLEU scores at inference time.<br>"
